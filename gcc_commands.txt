@@ -1,0 +1,17 @@
+sudo apt-get install --reinstall gcc-4.9
+C_INCLUDE_PATH=/usr/src/linux-headers-4.19.55.mptcp/include 
+export C_INCLUDE_PATH
+gcc -xc -E -v -
+C_INCLUDE_PATH=.:/usr/src/linux-headers-4.19.55.mptcp/arch/x86/include/:/usr/src/linux-headers-4.19.55.mptcp/arch/x86/include/asm:/usr/src/linux-headers-4.19.55.mptcp/arch/x86/include/generated:/usr/src/linux-headers-4.19.55.mptcp/arch/x86/include/uapi:/usr/src/linux-headers-4.19.55.mptcp/include:/usr/src/linux-headers-4.19.55.mptcp/:/usr/src/linux-headers-4.19.55.mptcp/include/uapi:/usr/src/linux-headers-4.19.55.mptcp/include/net
+
+/* mptcp checking command*/
+curl http://www.multipath-tcp.org
+
+/*configure mptcp*/
+sudo ip rule add from 192.168.0.107 table 1
+sudo ip rule add from 192.168.43.114 table 2
+sudo ip route add 192.168.0.0/24 dev enp3s0 scope link table 1
+sudo ip route add default via 192.168.0.1 dev enp3s0 table 1
+sudo ip route add 192.168.43.0/24 dev wlp2s0 scope link table 2
+sudo ip route add default via 192.168.43.1 dev wlp2s0 table 2
+sudo ip route add default scope global nexthop via 192.168.0.1 dev enp3s0
