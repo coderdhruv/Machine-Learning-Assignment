@@ -7,8 +7,6 @@ class preprocess:
         self.file = file
     def store_to_dataframe(self):
         self.read_file = pd.read_csv('./data_banknote_authentication.txt',names = ['feature1','feature2','feature3','feature4','class'])
-        print(self.read_file['feature1'])
-        print(self.read_file.iloc[0,:][0])
         return self.read_file
     def normalize(self,df):
         max = -9999999
