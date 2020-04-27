@@ -1,4 +1,5 @@
 from preprocessing import preprocess
+from performance_metric import performance
 import math
 import numpy as np
 
@@ -49,9 +50,9 @@ def logistic_regression(df,alpha,weight_list):
 file = open('./data_banknote_authentication.txt','r')
 prep = preprocess(file)
 df = prep.store_to_dataframe()
-df = prep.normalize(df)
+df1,df2 = prep.test_train_data_set(df,0.2)
 weight_list_test = [1,0,0,0,0]
-orignal_cost,new_cost,weight_list_1 = logistic_regression(df,0.01,weight_list_test)
+orignal_cost,new_cost,weight_list_1 = logistic_regression(df1,0.04,weight_list_test)
 print(weight_list_1)
 print(orignal_cost)
 print(new_cost)
@@ -59,15 +60,20 @@ final_weight_list = []
 cnt = 1
 orignal_cost = 2
 new_cost = 1
-while abs(orignal_cost - new_cost) > 0.001:
-    orignal_cost,new_cost,weight_list_1 = logistic_regression(df,0.3,weight_list_1) 
+epoch = 0
+while abs(orignal_cost - new_cost) > 0.005 and epoch < 4000:
+    orignal_cost,new_cost,weight_list_1 = logistic_regression(df1,0.04,weight_list_1)
+    epoch += 1 
     print("change",orignal_cost - new_cost)   
     print(orignal_cost,new_cost,weight_list_1)
 final_weight_list_1 = np.array(weight_list_1)
-test_list = [1,2.2504,3.5757,0.35273,0.2836]
-test_list_arr = np.asarray(test_list)
-print(sigmoid_z(np.dot(final_weight_list_1,test_list_arr)))
-test_result = [243,-356,-87,-139,46]
-test_result = np.array(test_result)
-print("ans",sigmoid_z(np.dot(test_list_arr,test_result)))
-
+print(final_weight_list_1,'final_weight_list')
+# test_list = [1,2.2504,3.5757,0.35273,0.2836]
+# test_list_arr = np.asarray(test_list)
+# print(sigmoid_z(np.dot(final_weight_list_1,test_list_arr)))
+# test_result = [243,-356,-87,-139,46]
+# test_result = np.array(test_result)
+# print("ans",sigmoid_z(np.dot(test_list_arr,test_result)))
+p = performance()
+print('accuracy:',p.accuracy(final_weight_list_1,df2))
+print('fscore:',p.f_score())
