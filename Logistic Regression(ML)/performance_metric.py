@@ -19,22 +19,25 @@ class performance:
             feature_vector.insert(0,1)
             feature_vector_arr = np.asarray(feature_vector)
             value_out = self.sigmoid_z1(np.dot(weight_list,feature_vector_arr))
-            print(value_out)
+            print('value_out:',value_out,' label:',label)
             if value_out >= 0.5:
-                if label == 1:
+                if label == 1.0:
                     performance.cnt += 1
                     performance.tp += 1
-                elif label == 0:
+                elif label == 0.0:
                     performance.fp += 1
             elif value_out < 0.5:
-                if label == 1:
+                if label == 1.0:
                     performance.fn += 1
-                elif label == 0:
+                elif label == 0.0:
                     performance.tn += 1
-                    performance.cnt += 1                
-        return (performance.cnt/len(df))*100
+                    performance.cnt += 1
+        print('cnt:',performance.cnt)                
+        return (float(performance.cnt)/len(df))*100
     def f_score(self):
-        precision = performance.tp/((performance.tp)+(performance.fp))
-        recall = performance.tp/((performance.tp)+(performance.fn))
+        precision = float(performance.tp)/(float(performance.tp)+float(performance.fp))
+        print('precision',precision)
+        recall = float(float(performance.tp)/(float(performance.tp)+float(performance.fn)))
+        print('recall',recall)
         fscore = 2*(recall*precision)/(recall + precision)
         return fscore
