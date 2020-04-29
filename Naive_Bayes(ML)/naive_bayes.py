@@ -37,25 +37,109 @@ def find_naive_bayes_prob(sentence,prob_words_0,prob_words_1,cnt_0,cnt_1):
     prob_words_0,prob_words_1 = laplace_smoothing_prob(sentence,prob_words_0,prob_words_1,cnt_0,cnt_1)
     prob_1 = 1
     prob_0 = 1
-    print(prob_words_0,prob_words_1)
+    #print(prob_words_0,prob_words_1)
     for i in sentence_list:
         prob_1 = prob_1 * prob_words_1[i] 
     for i in sentence_list:
         prob_0 = prob_0 * prob_words_0[i]
     final_prob_1 = (prob_1 * total_prob_1)/((prob_1 * total_prob_1) + (prob_0 * total_prob_0))
     return final_prob_1
-
-
+def accuracy(file1,prob_words_0,prob_words_1,cnt_0,cnt_1):
+    lines = []
+    with open(file1.name) as f:
+        lines = [line for line in f if line.strip()]
+    cnt = 0    
+    for i in range(0,len(lines)):
+        #print(lines[i])
+        # #print(label)
+        sentence = lines[i].split(' ')
+        label = sentence[len(sentence)-1][-2]
+        #print(label)
+        sentence[len(sentence)-1] = sentence[len(sentence)-1][:-3]
+        r = ''
+        for i in sentence:
+            r = r + i + ' '
+        value_pred = find_naive_bayes_prob(r,prob_words_0,prob_words_1,cnt_0,cnt_1)
+        if value_pred >= 0.5:
+            if label == '1':
+                cnt += 1
+        elif value_pred < 0.5:
+            if label == '0':
+                cnt += 1
+    return cnt/len(lines)
+def f_score(file1,prob_words_0,prob_words_1,cnt_0,cnt_1):
+    lines = []
+    with open(file1.name) as f:
+        lines = [line for line in f if line.strip()]
+    cnt = 0
+    tp = 0
+    tn = 0
+    fp = 0
+    fn = 0    
+    for i in range(0,len(lines)):
+        #print(lines[i])
+        # #print(label)
+        sentence = lines[i].split(' ')
+        label = sentence[len(sentence)-1][-2]
+        #print(label)
+        sentence[len(sentence)-1] = sentence[len(sentence)-1][:-3]
+        r = ''
+        for i in sentence:
+            r = r + i + ' '
+        value_pred = find_naive_bayes_prob(r,prob_words_0,prob_words_1,cnt_0,cnt_1)
+        if value_pred >= 0.5:
+            if label == '1':
+                cnt += 1
+                tp += 1
+            elif label == '0':
+                fp += 1
+        elif value_pred < 0.5:
+            if label == '0':
+                cnt += 1
+                tn += 1
+            elif label == '1':
+                fn += 1
+    recall = tp/(tp + fn)
+    precision = tp/(tp + fp)
+    fscore = (2*(recall)*(precision))/(recall + precision)
+    return fscore 
     
-file1 = open("a1_d3.txt","r")
-prep = preprocess(file1)
-print(prep.text_to_list())
-words_0,words_1,cnt_0,cnt_1 = prep.store_to_dict()
-#print(words_0,words_1,cnt_0,cnt_1)
-prob_words_0,prob_words_1 = finding_words_prob(words_0,words_1)
-#print(prob_words_0,prob_words_1)
-total_prob_0 = cnt_0/(cnt_0+cnt_1)
-total_prob_1 = cnt_1/(cnt_1+cnt_0)
-print(total_prob_0,total_prob_1)
-input_sentence = input()
-print(find_naive_bayes_prob(input_sentence,prob_words_0,prob_words_1,cnt_0,cnt_1))
+
+
+acc = []
+fscore = []
+l = 0
+#findind accuracy for k-folds
+for i in range(0,5): 
+    file = open("a1_d3.txt","r")
+    prep1 = preprocess(file)
+    prep1.split_file_test_train(l,l+0.2)   
+    file1 = open("train.txt","r")
+    prep = preprocess(file1)
+    print(prep.text_to_list())
+    words_0,words_1,cnt_0,cnt_1 = prep.store_to_dict()
+    print(cnt_0,cnt_1)
+    total = cnt_0 + cnt_1
+    print(total)
+    total_prob_0 = (cnt_0)/(cnt_0 + cnt_1)
+    total_prob_1 = (cnt_1)/(cnt_1 + cnt_0)
+    print(total_prob_0,total_prob_1)
+    prob_words_0,prob_words_1 = finding_words_prob(words_0,words_1)
+    print(prob_words_0,prob_words_1)
+    file2 = open("test.txt","r")
+    acc.append(accuracy(file2,prob_words_0,prob_words_1,cnt_0,cnt_1))
+    fscore.append(f_score(file2, prob_words_0, prob_words_1, cnt_0, cnt_1))
+    l = l + 0.2
+print("accuracy for validation step for 5 fold cross validation")
+avg_acc = 0
+for i in acc:
+   avg_acc = avg_acc + i
+   print(i)
+print('avg accuracy:',avg_acc/5)
+
+print("fscore for validation step for 5 fold cross validation")
+avg_fscore = 0
+for i in fscore:
+    avg_fscore = avg_fscore + i
+    print(i)
+print('avg fscore:',avg_fscore/5)

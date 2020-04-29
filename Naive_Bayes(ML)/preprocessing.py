@@ -6,6 +6,17 @@ class preprocess:
     content = []
     def __init__(self,file1):
         self.file1 = file1
+    def split_file_test_train(self,a,b):
+        f1 = open("train.txt", "w")
+        f2 = open("test.txt", "w")
+        lines = []
+        with open(self.file1.name) as f:
+            lines = [line for line in f if line.strip()]
+        for i in range(0,len(lines)):
+            if i < b*len(lines) and i > a*len(lines):
+                f2.write(lines[i])
+            else:
+                f1.write(lines[i])
     def text_to_list(self):
         self.content = self.file1.readlines()
         self.content = [x.strip() for x in self.content]
@@ -31,8 +42,5 @@ class preprocess:
                         else:
                             self.words_1[j] = 1
         return self.words_0,self.words_1,self.cnt_0,self.cnt_1
-    
-    
-    
 
 
