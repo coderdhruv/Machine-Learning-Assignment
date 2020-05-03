@@ -1,4 +1,7 @@
 from preprocessing import preprocess
+import math
+
+f = open("ouput_naive_bayes_1.txt","w")
 
 def finding_words_prob(words_0,words_1):
     prob_words_0 = {}
@@ -131,15 +134,36 @@ for i in range(0,5):
     fscore.append(f_score(file2, prob_words_0, prob_words_1, cnt_0, cnt_1))
     l = l + 0.2
 print("accuracy for validation step for 5 fold cross validation")
+f.write("accuracy for validation step for 5 fold cross validation:\n")
 avg_acc = 0
+cnt = 1
 for i in acc:
-   avg_acc = avg_acc + i
-   print(i)
+    avg_acc = avg_acc + i
+    f.write("accuracy for " + str(cnt) + " fold is : " + str(i) + "\n")
+    cnt += 1
+    print(i)
 print('avg accuracy:',avg_acc/5)
-
+avg_acc = avg_acc/5
+#standard deviation for accuracy
+std_dv_acc = 0
+for i in acc:
+    std_dv_acc = std_dv_acc + ((i - avg_acc)*(i - avg_acc))
+std_dv_acc = math.sqrt(std_dv_acc/5)
+f.write('average accuracy is: ' + str(avg_acc) + " +- " + str(std_dv_acc) + "\n")
 print("fscore for validation step for 5 fold cross validation")
+f.write("fscore for validation step for 5 fold cross validation:\n")
 avg_fscore = 0
+cnt = 1
 for i in fscore:
     avg_fscore = avg_fscore + i
+    f.write("fscore for " + str(cnt) + " fold is : " + str(i) + "\n")
+    cnt += 1
     print(i)
 print('avg fscore:',avg_fscore/5)
+avg_fscore = avg_fscore/5
+std_dv_fsc = 0
+#standard deviation for fscore
+for i in fscore:
+    std_dv_fsc = std_dv_fsc + ((i-avg_fscore)*(i-avg_fscore))
+std_dv_fsc = math.sqrt(std_dv_fsc/5)
+f.write('average fscore is: ' + str(avg_fscore) + " +- " + str(std_dv_fsc) + "\n")

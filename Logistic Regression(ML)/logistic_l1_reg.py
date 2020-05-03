@@ -4,10 +4,16 @@ import math
 import numpy as np
 
 
+f = open('output_l1.txt','w')
+f.write('weight list after each iteration:\n')
 def sigmoid_z(z):
     return 1/(1 + np.exp(-z))
     
-
+def list_to_string(list1):
+    s = ""
+    for i in list1:
+        s = s + str(i) + " "
+    return s 
 def calc_likehihood_est(weight_list_1,df,lmbda):    
     sum = 0
     reg_term = 0
@@ -45,17 +51,19 @@ def logistic_regression(df,alpha,weight_list,lmbda):
             sum = sum - alpha*(((sigmoid_z(np.dot(feature_vector_arr,weight_list_1)) - label)*feature_vector_arr[i]))
         weight_list_1[i] = weight_list_1[i] + sum - alpha*(lmbda)
     print(weight_list_1,"After modification")
+    f.write(list_to_string(weight_list_1) + "\n")
     new_cost = calc_likehihood_est(weight_list_1,df,1)
     print(new_cost,"After function call")
     return orignal_cost,new_cost,weight_list_1
 
-
+alpha = input("Alpha:")
+lamda = input("lambda:")
 file = open('./data_banknote_authentication.txt','r')
 prep = preprocess(file)
 df = prep.store_to_dataframe()
 df1,df2 = prep.test_train_data_set(df,0.2)
-weight_list_test = [1,0,0,0,0]
-orignal_cost,new_cost,weight_list_1 = logistic_regression(df1,0.01,weight_list_test,1)
+weight_list_test = np.random.randn(5)
+orignal_cost,new_cost,weight_list_1 = logistic_regression(df1,alpha,weight_list_test,lamda)
 print(weight_list_1)
 print(orignal_cost)
 print(new_cost)
@@ -64,13 +72,23 @@ cnt = 1
 orignal_cost = 2
 new_cost = 1
 epoch = 0
-while (orignal_cost - new_cost) > 0.005 and epoch < 100:
-    orignal_cost,new_cost,weight_list_1 = logistic_regression(df1,0.01,weight_list_1,1)
+while (orignal_cost - new_cost) > 0.0005 and epoch < 100:
+    orignal_cost,new_cost,weight_list_1 = logistic_regression(df1,alpha,weight_list_1,lamda)
     epoch += 1 
     print("change",orignal_cost - new_cost)   
     print(orignal_cost,new_cost,weight_list_1)
 final_weight_list_1 = np.array(weight_list_1)
 print(final_weight_list_1,'final_weight_list')
+f.write('final weight list :')
+f.write(list_to_string(final_weight_list_1) + "\n")
 p = performance()
-print('accuracy:',p.accuracy(final_weight_list_1,df2))
-print('fscore:',p.f_score())
+accuracy = p.accuracy(final_weight_list_1, df2,f)
+print('accuracy:',accuracy)
+f.write('accuracy:')
+f.write(str(accuracy) + "\n")
+fscore = p.f_score()
+print('fscore:',fscore)
+f.write('fscore:')
+f.write(str(fscore))
+f.close()
+

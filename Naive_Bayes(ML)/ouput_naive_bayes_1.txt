@@ -1,0 +1,14 @@
+accuracy for validation step for 5 fold cross validation:
+accuracy for 1 fold is : 0.7537688442211056
+accuracy for 2 fold is : 0.9547738693467337
+accuracy for 3 fold is : 0.96
+accuracy for 4 fold is : 0.949748743718593
+accuracy for 5 fold is : 0.9547738693467337
+average accuracy is: 0.9146130653266331 +- 0.08048743200926886
+fscore for validation step for 5 fold cross validation:
+fscore for 1 fold is : 0.774468085106383
+fscore for 2 fold is : 0.9292035398230087
+fscore for 3 fold is : 0.9569377990430622
+fscore for 4 fold is : 0.9447236180904524
+fscore for 5 fold is : 0.956043956043956
+average fscore is: 0.9122753996213724 +- 0.06962861653049851

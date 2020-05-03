@@ -1,0 +1,44 @@
+﻿Group Member Details:
+Dhruv Gupta - 2017A7PS0108H
+Ritik Parkar Sachin - 2017A4PS0836H
+Shivam Agarwalla - 2017A7PS1589H
+
+
+
+
+
+Logistic Regression Report
+
+Preprocessing:
+
+1)The data was split into training and test dataset using 80-20 rule
+2)The feature values were standardized using the formula : (xi – min)/(max - min) .
+3)Weight vector was initialized by both gaussian and uniform distributions.
+
+Formaule Used:
+
+1)Logistic Regression without regularisation:
+
+
+
+2)For L1 Regularisation:
+Adding the subtracting the term (lambda*(ith weight-vector term )^2)
+
+
+3)For L1 Regularisation:
+Adding the term lambda*abs(ith weight-vector term)
+
+Feature Value Estimation:
+L1’s effect on pushing towards 0 (sparsity):
+If w is positive, the regularisation parameter λ>0 will push w to be less positive, by subtracting λ from w. Conversely in Equation 3.2, if w is negative, λ will be added to w, pushing it to be less negative. Hence, this has the effect of pushing w towards 0.As w goes to 0, we are reducing the number of features by reducing the variable importance.
+While L1 has the influence of pushing weights towards 0 and L2 does not, this does not imply that weights are not able to reach close to 0 due to L2.
+According to our dataset feature 4 (entropy of image) has less influence on the output prediction as the value of its weight vector is close to zero.
+reference quoted:
+towardsdatascience site which is well-known site for data science
+https://towardsdatascience.com/intuitions-on-l1-and-l2-regularisation-235f2db4c261
+
+4)Output Files:
+All the output files with and without regularisation are provided along with the code.
+
+
+

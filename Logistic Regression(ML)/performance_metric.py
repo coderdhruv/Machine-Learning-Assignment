@@ -11,7 +11,7 @@ class performance:
     def sigmoid_z1(self,z):
         return 1/(1 + np.exp(-z))
 
-    def accuracy(self,weight_list,df):        
+    def accuracy(self,weight_list,df,file):        
         for i in range(0,len(df)):
             feature_vector = list(df.iloc[i,:])
             label =  feature_vector[len(feature_vector)-1]
@@ -20,6 +20,7 @@ class performance:
             feature_vector_arr = np.asarray(feature_vector)
             value_out = self.sigmoid_z1(np.dot(weight_list,feature_vector_arr))
             print('value_out:',value_out,' label:',label)
+            file.write('value predicted :' + str(value_out) + " " + 'label: ' + str(label) + "\n")
             if value_out >= 0.5:
                 if label == 1.0:
                     performance.cnt += 1
