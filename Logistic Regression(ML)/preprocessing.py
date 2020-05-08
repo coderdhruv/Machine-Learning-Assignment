@@ -22,7 +22,7 @@ class preprocess:
                 df.at[i,feature_vect[j]] = float((df.iloc[i,:][j] - min)/(max - min))
         return df
     def test_train_data_set(self,df,test_ratio):
-        shuffled_indices=np.random.permutation(len(df))
+        shuffled_indices = np.random.permutation(len(df))
         test_set_size=int(test_ratio*len(df))
         test_indices=shuffled_indices[:test_set_size]
         train_indices=shuffled_indices[test_set_size:]

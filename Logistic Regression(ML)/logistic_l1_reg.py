@@ -72,7 +72,7 @@ cnt = 1
 orignal_cost = 2
 new_cost = 1
 epoch = 0
-while (orignal_cost - new_cost) > 0.0005 and epoch < 100:
+while abs(orignal_cost - new_cost) > 0.0005 and epoch < 50:
     orignal_cost,new_cost,weight_list_1 = logistic_regression(df1,alpha,weight_list_1,lamda)
     epoch += 1 
     print("change",orignal_cost - new_cost)   
